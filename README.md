@@ -1,51 +1,29 @@
-# hr-knowledge
+# erp-knowledge
 
-Base de conocimiento para entender, diseñar y construir un módulo de RRHH (HCM) profesional, con foco
-en nómina. Es independiente de cualquier producto o cliente: lo que aquí está vale para cualquier
-ERP multitenant que quiera competir con SAP, Workday, Oracle u Odoo.
+Bases de conocimiento profesional para diseñar módulos de un ERP multitenant. Cada base es
+independiente y se publica como una skill propia:
 
-## Qué hay
-
-| Archivo | Para qué sirve | Léelo cuando… |
+| Base | Skill | Dominio |
 |---|---|---|
-| [mapa-hcm.md](mapa-hcm.md) | Los submódulos de un HCM en orden de dependencia, menús, equivalencias con el mercado, orden de construcción | Empiezas, o necesitas ubicar algo en el todo |
-| [core-hr.md](core-hr.md) | Persona, empleado, asignación, contrato, vigencias, ciclo de vida, plazas | Tocas datos del colaborador o cualquier dato con fecha efectiva |
-| [tiempo-y-ausencias.md](tiempo-y-ausencias.md) | Asistencia, horas extra, ausencias, saldos de vacaciones | Algo de asistencia o vacaciones alimenta la nómina |
-| [nomina/motor.md](nomina/motor.md) | Cómo calcula una nómina: configuración, pipeline, bases, prorrateos, impuesto, aportes, descuentos, tipos de corrida, retroactivos, liquidación | Diseñas o revisas el cálculo |
-| [nomina/periodos.md](nomina/periodos.md) | Período de pago, ventana de insumos y período de cómputo; tipos, restricciones, estados, cómo lo hacen los grandes | Defines calendarios, cierres o cualquier cosa con «del / al» |
-| [nomina/boleta.md](nomina/boleta.md) | La boleta como documento: contenido, canales, inmutabilidad, rectificación | Diseñas boletas o su entrega |
-| [nomina/salidas-y-controles.md](nomina/salidas-y-controles.md) | Pagos, contabilidad, declaraciones, controles internos | Cierras el ciclo o diseñas auditoría |
-| [nomina/casos-borde.md](nomina/casos-borde.md) | Checklist de situaciones difíciles y cómo se tratan | Revisas un diseño o un spec |
-| [nomina/escenarios-de-prueba.md](nomina/escenarios-de-prueba.md) | Diez casos que, si los resuelves a mano y con el sistema, dominas el motor | Armas goldens o pruebas de regresión |
-| [localizacion/peru.md](localizacion/peru.md) | Parámetros y reglas de Perú con fecha y fuente | Calculas algo legal en Perú |
-| [ux.md](ux.md) | Vistas por rol, componentes, flujos y reglas de diseño propias de RRHH | Diseñas pantallas |
-| [patrones.md](patrones.md) | Decisiones de diseño reutilizables y su porqué | Tomas una decisión de arquitectura |
-| [schema/](schema/README.md) | El esquema PostgreSQL de referencia (`hr_schema.sql`) y sus pruebas | Necesitas el modelo de datos concreto |
-| [glosario.md](glosario.md) | Términos y su equivalente en SAP, Workday, Oracle y Odoo | Una palabra no te queda clara |
-| [skill/SKILL.md](skill/SKILL.md) | Instrucciones para que un agente use esta base | Configuras Claude, Cursor u otro agente |
+| [hr-knowledge](hr-knowledge/README.md) | `hcm-nomina` | RRHH (HCM), nómina, legislación laboral peruana |
+| [logistica-knowledge](logistica-knowledge/README.md) | `logistica` | Inventario, kardex, valorización, almacén, compras, guías de remisión |
+| [pos-knowledge](pos-knowledge/README.md) | `pos` | Caja, venta, precios, pagos, comprobantes electrónicos, operación sin red |
 
-## Reglas para que crezca sin desordenarse
+## Aislamiento entre bases
 
-1. **Un dato vive en un solo archivo.** Si algo ya está escrito, se enlaza; no se copia.
-2. **Lo legal lleva fecha y fuente.** Todo valor legal indica desde cuándo rige, la norma y cuándo
-   revisarlo. Sin eso no se agrega.
-3. **Nada de clientes ni de proyectos.** Si un caso de un proyecto enseña algo, se escribe en
-   genérico. Las decisiones de un producto concreto viven en el repo de ese producto.
-4. **Se actualiza, no se acumula.** Al terminar una sesión de estudio o de diseño, lo nuevo se
-   incorpora al archivo que corresponde. No se crean documentos por sesión.
-5. **Ejemplo numérico siempre que se pueda**, con la aritmética verificada.
-6. **Lo que no se sabe se marca** como «verificar» con la pregunta concreta, en vez de suponer.
+- Un dato vive en una sola base. Si un tema pertenece a otra, se enlaza (sección «Bases hermanas»),
+  no se copia.
+- Cada skill lee solo los archivos de su carpeta; solo abre otra base cuando el tema la deriva ahí.
+- Los enlaces entre bases son relativos (`../logistica-knowledge/...`), por eso las tres carpetas viven
+  como hermanas en la raíz.
 
-## Cómo usarlo
+## Instalar las skills
 
-- **Para estudiar:** sigue el orden de `mapa-hcm.md` › «Orden de estudio».
-- **Para diseñar o revisar un requerimiento:** `patrones.md` y `nomina/casos-borde.md` son los
-  checklists.
-- **Con agentes:** instala la skill de `skill/SKILL.md`. El agente lee solo el archivo que el tema
-  necesita.
+```bash
+git clone git@github.com:MiguelBarreraDev/erp-knowledge.git ~/dev/erp-knowledge
+for s in hr-knowledge:hcm-nomina logistica-knowledge:logistica pos-knowledge:pos; do
+  ln -sfn ~/dev/erp-knowledge/${s%%:*}/skill ~/.claude/skills/${s##*:}
+done
+```
 
-## Aviso
-
-Las reglas legales cambian por país y por año. Los valores de `localizacion/` están verificados a la
-fecha que indica cada uno; antes de usarlos en producción, confírmalos con un especialista laboral o
-tributario del país.
+Instala solo la skill que necesites; ninguna depende de que las otras estén instaladas.

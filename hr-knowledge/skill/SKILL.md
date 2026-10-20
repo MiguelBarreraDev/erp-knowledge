@@ -5,7 +5,7 @@ description: Conocimiento de RRHH (HCM) y nómina profesional desde la base hr-k
 
 # HCM y nómina
 
-La fuente de verdad es la base de conocimiento `hr-knowledge` (por defecto en `~/dev/hr-knowledge`).
+La fuente de verdad es la base de conocimiento `hr-knowledge` (por defecto en `~/dev/erp-knowledge/hr-knowledge`).
 Antes de responder o diseñar, lee solo el archivo que el tema necesita:
 
 | Tema | Archivo |
